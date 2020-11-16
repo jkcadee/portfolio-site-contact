@@ -1,20 +1,31 @@
 import boto3
 import json
+import os
 
 ses = boto3.client('ses')
 
-RECEIVER = "janellesertyankwok@gmail.com"
-
-
+RECEIVER = os.environ["SEND_TO"]
 
 def email_handler(event, context):
+    email_confirmed_already = False
     print(event["body"])
 
     json_content = json.loads(event["body"])
-
-    ses.verify_email_identity(
-        EmailAddress = json_content["email_address"]
+    
+    response = ses.list_identities(
+        IdentityType = 'EmailAddress'
     )
+    
+    print(response)
+    
+    for item in response["Identities"]:
+        if item == json_content["email_address"]:
+            email_confirmed_already = True
+        
+    if email_confirmed_already == False :
+        ses.verify_email_identity(
+            EmailAddress = json_content["email_address"]
+        )
 
     sender = json_content["email_address"]
 

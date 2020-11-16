@@ -87,6 +87,12 @@ resource "aws_lambda_function" "contact_lambda" {
     handler = "contact_form.email_handler"
     runtime = "python3.8"
 
+    environment {
+        variables = {
+            SEND_TO = "janellesertyankwok@gmail.com"
+        }
+    }
+
     source_code_hash = filebase64sha256(data.archive_file.lambda_zip.output_path)
 }
 
