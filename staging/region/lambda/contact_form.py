@@ -30,15 +30,7 @@ def email_handler(event, context):
     sender = json_content["email_address"]
 
     message = "{\"message\":\"" + json_content["message"] + "\"}"
-
-    # template = ses.create_template(
-    # Template={
-    #     'TemplateName': 'EmailTemplate',
-    #     'SubjectPart': 'New Contact Email!',
-    #     'TextPart': '{{message}}',
-    #     'HtmlPart': '{{message}}'
-    # })
-
+    
     res = ses.send_templated_email(
         Source=sender,
         Destination={
