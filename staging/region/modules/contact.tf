@@ -89,7 +89,7 @@ resource "aws_lambda_function" "contact_lambda" {
 
     environment {
         variables = {
-            SEND_TO = "janellesertyankwok@gmail.com"
+            SEND_TO = var.INBOX_EMAIL
         }
     }
 
