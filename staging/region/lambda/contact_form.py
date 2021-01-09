@@ -12,12 +12,14 @@ def email_handler(event, context):
 
     json_content = json.loads(event["body"])
     
+    # Grabs all identities confirmed on AWS SES
     response = ses.list_identities(
         IdentityType = 'EmailAddress'
     )
     
     print(response)
     
+    # Will confirm an email if it is not confirmed
     for item in response["Identities"]:
         if item == json_content["email_address"]:
             email_confirmed_already = True
@@ -29,6 +31,7 @@ def email_handler(event, context):
 
     sender = json_content["email_address"]
 
+    # Parsing the message from the JSON content 
     message = "{\"message\":\"" + json_content["message"] + "\"}"
     
     res = ses.send_templated_email(
@@ -42,6 +45,7 @@ def email_handler(event, context):
         TemplateData=message
     )
 
+    # Returns a 200 to signify that the message was sent.
     return {
         'statusCode': 200,
         'headers': {
